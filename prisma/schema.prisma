@@ -1,38 +1,24 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["mongoDb"]
+}
+
 datasource db {
-  provider = "sqlite"
+  provider = "mongodb"
   url      = env("DATABASE_URL")
 }
 
-generator client {
-  provider = "prisma-client-js"
+type LeaguesTeams {
+  teamCity String
+  teamId   String
+  teamName String
 }
 
-model User {
-  id    String @id @default(cuid())
-  email String @unique
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  password Password?
-  notes    Note[]
-}
-
-model Password {
-  hash String
-
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  userId String @unique
-}
-
-model Note {
-  id    String @id @default(cuid())
-  title String
-  body  String
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  userId String
+model leagues {
+  id            String         @id @default(auto()) @map("_id") @db.ObjectId
+  associationId String
+  leagueName    String
+  leagueRanking String
+  level         Int
+  teams         LeaguesTeams[]
 }
